@@ -30,13 +30,13 @@ public class PetController {
     }
 
     @GetMapping("/findByType")
-    public List<Pet> greetUser(@RequestParam String type) {
+    public List<Pet> findByType(@RequestParam String type) {
         List<Pet> pets = petService.getPetsByType(type);
         return pets;
     }
 
     @PostMapping
-    public Pet createBook(@RequestBody Pet pet) {
+    public Pet createPet(@RequestBody Pet pet) {
         return petService.createPet(pet);
     }
 
