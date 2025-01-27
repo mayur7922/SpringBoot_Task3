@@ -1,15 +1,16 @@
 package com.example.petAdoption.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.example.petAdoption.model.Pet;
 import com.example.petAdoption.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
-import com.example.petAdoption.repository.PetRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pets")
@@ -17,6 +18,11 @@ public class PetController {
 
     @Autowired
     private PetService petService;
+
+    @GetMapping("/csrf")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
 
     @GetMapping
     public List<Pet> getAllpets() {
