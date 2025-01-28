@@ -53,7 +53,7 @@ public class PetControllerTest {
         pet2 = new Pet("Cat", "b", 10L);
     }
 
-    // GET /api/tables
+    // GET /api/pets
     @Test
     public void testGetTables_HappyPath() throws Exception {
         Mockito.when(petService.getAllPets()).thenReturn(Arrays.asList(pet1, pet2));
@@ -68,38 +68,39 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$[1].age").value("10"));
     }
 
-    // PATCH /api/tables/{id}
+    //     POST /api/pets
+    @Test
+    public void testAddPet_HappyPath() throws Exception {
+        Mockito.when(petService.createPet(any(Pet.class))).thenReturn(pet1);
+
+        mockMvc.perform(post("/api/pets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(pet1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("Dog"))
+                .andExpect(jsonPath("$.breed").value("a"))
+                .andExpect(jsonPath("$.age").value(7));
+    }
+
+    // PATCH /api/pets/{id}
 //    @Test
-//    public void testUpdateTableAvailability_HappyPath() throws Exception {
-//        Mockito.when(tableService.updateTableAvailability(1L, false))
-//                .thenReturn(Optional.of(new TableEntity(1L, "Table 1", 4, false)));
+//    public void testUpdatePetDetails_HappyPath() throws Exception {
+//        Mockito.when(petService.updatePet(1L, null))
+//                .thenReturn(new Pet("Dog", "a", 7L));
 //
-//        mockMvc.perform(patch("/api/tables/1")
-//                        .param("isAvailable", "false"))
+//        mockMvc.perform(patch("/api/pets/1")
+//                        .param("breed", "c"))
 //                .andExpect(status().isOk())
-//                .andExpect(content().string("Table availability updated successfully."));
+//                .andExpect(content().string("Pet details updated successfully."));
 //    }
 
 //    @Test
-//    public void testUpdateTableAvailability_UnhappyPath() throws Exception {
-//        Mockito.when(tableService.updateTableAvailability(999L, false)).thenReturn(Optional.empty());
+//    public void testUpdatePetDetails_UnhappyPath() throws Exception {
+//        Mockito.when(petService.updatePet(10L, null))
+//                .thenReturn(null);
 //
-//        mockMvc.perform(patch("/api/tables/999")
-//                        .param("isAvailable", "false"))
+//        mockMvc.perform(patch("/api/pets/10")
+//                        .param("breed", "d"))
 //                .andExpect(status().isNotFound());
-//    }
-
-    // POST /api/tables
-//    @Test
-//    public void testAddTable_HappyPath() throws Exception {
-//        Mockito.when(tableService.addTable(any(TableEntity.class))).thenReturn(table1);
-//
-//        mockMvc.perform(post("/api/tables")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(table1)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1))
-//                .andExpect(jsonPath("$.name").value("Table 1"))
-//                .andExpect(jsonPath("$.capacity").value(4));
 //    }
 }
